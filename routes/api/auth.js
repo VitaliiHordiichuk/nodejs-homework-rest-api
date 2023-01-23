@@ -9,7 +9,11 @@ const {
 const { auth: ctrl } = require("../../controllers");
 
 const router = express.Router();
-const { JoiRegisterShema, JoiLoginShema } = require("../../models/user");
+const {
+  JoiRegisterShema,
+  JoiLoginShema,
+  schemaResendConfirm,
+} = require("../../models/user");
 
 router.post(
   "/signup",
@@ -29,5 +33,9 @@ router.patch(
   upload.single("avatar"),
   ctrlWrapper(ctrl.createAvatar)
 );
+
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verify));
+
+router.post("/verify", validation(schemaResendConfirm), ctrl.resendMailConfirm);
 
 module.exports = router;
